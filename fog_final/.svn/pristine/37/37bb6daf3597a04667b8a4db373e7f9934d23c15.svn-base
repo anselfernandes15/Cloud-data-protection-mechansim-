@@ -1,0 +1,60 @@
+<%@include file="header.jsp"%>
+<%@include file="navigation_user.jsp" %>
+<%@include file="flash.jsp" %>
+<!-- Carousel
+================================================== 
+
+ String ustatus="false";
+session.setAttribute("ustatus","false");
+        %>
+-->
+<div id="myCarousel" class="carousel slide" data-interval="3000">
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+  
+   
+</div>
+<div class="container">
+  <div class="span6">
+            <form class="form-signin" action="access" enctype="multipart/form-data">
+                
+                <% //String msg=(String)request.getAttribute("error");
+                String user=(String)session.getAttribute("user");
+ if(user!=null&&!user.equals("admin"))
+                         {            
+                String msg=request.getParameter("keymsg");
+                String download=(String)session.getAttribute("download");
+                if(download!=null&&download.equals("true"))
+                    response.sendRedirect("view_files.jsp");
+     if(msg==null)
+                session.setAttribute("kcount",0);
+      session.setAttribute("fid",request.getParameter("id"));
+    //  session.setAttribute("filetype",request.getParameter("type"));}
+  %>
+                <h2 class="form-signin-heading">Please Enter Authentication Key </h2>
+             <input type="text" class="input-block-level validate[required]" placeholder="Your Key" name="key">
+              
+                <% 
+if(msg!=null)
+       {
+    int c=(Integer)session.getAttribute("kcount");
+c++;session.setAttribute("kcount",c);
+                %><h3><font color="red"><%=msg%></font></h3><%
+}
+               
+}   
+else
+{
+ %> 
+ <h3 class="form-signin-heading">Please <a href="login.jsp">Login</a> Again </h3>
+  <%}%>
+                <button class="btn btn-large btn-primary" type="submit">Submit</button>
+            </form>
+        </div>
+    
+</div>
+<!-- /END THE FEATURETTES -->
+<%@include file="footer.jsp" %>

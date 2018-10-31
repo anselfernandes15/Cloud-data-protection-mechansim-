@@ -1,0 +1,54 @@
+<%@include file="header.jsp" %>
+<%@include file="navigation_user.jsp" %>
+<%@include file="flash.jsp" %>
+<%@ page import="java.sql.*" %>
+<%@page  import="core.db.dbconn" %>
+<div class="container">
+    <div class="row background space20">
+        <%@include file="search.jsp"%>
+   <%
+  session.setAttribute("download", "false");              
+Statement connect = dbconn.connect();int i=1;
+ String profile=(String)session.getAttribute("profile"); 
+int uid=(Integer)session.getAttribute("userid");
+String sql="";
+if(profile==null||new core.db.UserBehaviourAlg().getBehave(uid).equals("validate"))
+    sql="select * from files";
+else
+      sql="select * from files where uid=1";  
+
+
+ResultSet rs=connect.executeQuery(sql);
+if(!rs.first())
+       {%>
+       <h3> No Files are Uploaded yet</h3>
+ <%}
+else
+       {%>
+   
+     <table border="0" length="50%" width="50%">
+      
+    <%
+     while(rs.next())
+  {%>
+                 
+    <tr class="tr1" >
+        <td><a href="accessfile.jsp?id=<%=rs.getInt(1)%>" <td class="td1"><%=rs.getString("file_name")%></td>
+    <td  class="td1"><%=rs.getString("file_size")%>kb</td><td  class="td1"><%= rs.getDate("date")%></td>
+     
+</tr> 
+
+<%} } 
+ %>
+
+                
+                </table>    
+                
+     
+  
+    </div>
+
+    <!-- Example row of columns -->
+   
+</div>
+<%@include file="footer.jsp" %>

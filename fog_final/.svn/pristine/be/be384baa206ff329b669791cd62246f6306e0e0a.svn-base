@@ -1,0 +1,46 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package core.db;
+import java.security.*;
+import javax.crypto.*;
+
+/**
+ *
+ * @author Eiosys_2
+ */
+public class Hmac {
+  public static String hmac(String str) throws Exception {
+
+        // Generate secret key for HMAC-MD5
+        KeyGenerator kg = KeyGenerator.getInstance("HmacMD5");
+        SecretKey sk = kg.generateKey();
+
+        // Get instance of Mac object implementing HMAC-MD5, and 
+        // initialize it with the above secret key
+        Mac mac = Mac.getInstance("HmacMD5");
+        mac.init(sk);
+        byte[] result = mac.doFinal(str.getBytes());
+        return result.toString();
+    }  
+  
+  public static void main(String args[])
+  {
+      
+      Hmac h=new Hmac();
+     try{
+         
+         core.db.UserBehaviourAlg alg =new core.db.UserBehaviourAlg();
+         System.out.print("Behave"+alg.getBehave(12)+"\n");
+         
+         System.out.print("Hiiiiii"+hmac("Srujana")+"zzzzzzzz"+hmac("Srujana").toString());
+         
+         System.out.print(hmac("Saibaba"));
+     }
+      catch(Exception e)
+      {
+      }
+    
+  }
+}

@@ -1,0 +1,143 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package core.db;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author Eiosys_2
+ */
+public class UserBehaviourAlg {
+   public float avg,value;
+   public final List<String> l=new ArrayList<String>();
+   public static final float THREASH=0.5f;
+   public static final int COUNT=4,MIN_RECORDS=5;
+    public int count,valid,invalid,uid,rows;
+    public String operation,pwd,fileids,fid,decoys,status,key,hmac,behave,filetype;
+    public UserBehaviourAlg()
+            {
+              l.add("wrongkey");
+              l.add("invalid");
+              l.add("trialkey");
+              l.add("decoy");
+              l.add("editpwdwrongkey");
+              l.add("editpwdtrialkey");
+              l.add("wrongpwd");
+              l.add("trialpwd");
+           }
+    
+    public String getBehave(int userid)
+   {
+   
+    try{
+         uid=userid;
+        Statement st=dbconn.connect();
+
+      Statement st1=dbconn.connect();ResultSet rs1=null,rs2=null,rs3=null;
+     ResultSet rs11=st.executeQuery("select count(*) as rowcount from logdetails join users on logdetails.userid=users.uid where logdetails.userid="+uid);
+     rs11.next();
+     int ResultCount = rs11.getInt("rowcount");
+System.out.print("\ncount"+ResultCount);
+     if(ResultCount<=MIN_RECORDS)
+     {
+          return "validate";//initial state 
+     }
+     else
+     {
+          ResultSet rs=st.executeQuery("select * from logdetails join users on logdetails.userid=users.uid where logdetails.userid="+uid);
+    if(!rs.first())
+    {
+     //System.out.print("EXXXXX");   
+    }
+        
+        while(rs.next())
+      {invalid=0;
+          //step1 evaluating the operation
+          operation=rs.getString("action");
+            System.out.print("\noperation"+operation+invalid);
+         if(operation==null||operation.equals("viewfiles")) continue;
+          if(operation!=null&&l.contains(operation))
+          {
+              invalid++;
+              if(operation.equalsIgnoreCase("decoy"))
+              {
+                  value=1;continue;
+              }
+          }
+          //step2 evaluating the accessed file//USE HMAC here
+          fid=rs.getString("fid");System.out.print(" \nfiletype"+ filetype+invalid);
+
+           if(fid!=null) 
+           { rs2=st1.executeQuery("select * from files where file_id="+fid);
+               if(rs2.next())
+                   hmac=core.db.Hmac.hmac(rs2.getString("file_name") +rs2.getInt("file_size"));
+               rs3=st1.executeQuery("select * from files where hmac='"+hmac+"'");
+               
+               if(rs3.next())
+                  invalid++;
+          
+           }
+         //step3 evaluating the key value during file access & edit pwd;
+           key=rs.getString("ukey");System.out.print("\nkey"+key+"  "+invalid);
+
+           if(key!=null)
+           {  
+               rs1=st1.executeQuery("select * from users where uid="+uid+" and userkey='"+key+"'");
+                if(!rs1.first()||operation.equals("trialkey")||operation.equals("editpwdtrialkey"))  
+                   invalid++;
+          
+           }
+         //step4 login action 
+           pwd=rs.getString("pwd");System.out.print("\npwd"+pwd+invalid);
+           if(pwd!=null)
+           {  
+               rs1=st1.executeQuery("select * from users where uid="+uid+" and pwd='"+pwd+"'");
+                if(!rs1.first()||operation.equals("trialpwd")||operation.equals("editpwdtrialkey"))  
+                   invalid++;
+          
+           }System.out.print("\ninvalid"+invalid+"value"+value);
+        value=value+(((float)invalid)/((float)COUNT));
+        if(value >=THREASH)
+              rows++;
+      }
+   
+    
+    avg=ResultCount/2;
+     System.out.print("\navg"+avg);
+     if(rows>=ResultCount/2)//checking whether it is beyond the threashhold value
+       behave="invalidate";
+     else 
+         behave="validate";
+   
+    } 
+    }    catch(Exception e)
+       {
+            System.out.print(e);
+       }
+      
+   
+    return behave;
+   }
+   public static void main(String args[])
+  {
+      
+      Hmac h=new Hmac();
+     try{
+         
+         core.db.UserBehaviourAlg alg =new core.db.UserBehaviourAlg();
+         System.out.print("\nBehave"+alg.getBehave(12)+"\n");
+      System.out.print("\nBehave"+alg.getBehave(14)+"\n");
+         
+          }
+      catch(Exception e)
+      {
+      }
+    
+  }
+}

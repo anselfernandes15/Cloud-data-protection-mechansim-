@@ -1,0 +1,68 @@
+<%@include file="header.jsp" %>
+<%@include file="navigation_user.jsp" %>
+<%@include file="flash.jsp" %>
+<%@ page import="java.sql.*" %>
+<%@page  import="core.db.dbconn" %>
+<div class="container">
+    <div class="row background space20">
+   <%String user=(String)session.getAttribute("user");
+if(user!=null&&!user.equals("admin"))
+       {
+     String profile=(String)session.getAttribute("profile"); session.setAttribute("download","false");          
+Statement connect = dbconn.connect();
+String sql="";int i=1;      String ipAddress = request.getHeader("X-FORWARDED-FOR");  
+   if (ipAddress == null) {  
+	   ipAddress = request.getRemoteAddr();  
+   }
+     
+int userid=(Integer)session.getAttribute("userid");
+ ResultSet rs4=connect.executeQuery("select * from logdetails where userid="+userid+" and ipaddress='"+ipAddress+"' and action='viewfiles'");  //3 is max ipaddresses 
+      if(!rs4.first())
+          connect.executeUpdate("Insert into logdetails (userid,ipaddress,action) values("+userid+",'"+ipAddress+"','viewfiles')" );
+      
+if(profile==null||new core.db.UserBehaviourAlg().getBehave(userid).equals("validate"))
+    sql="select * from files";
+else
+      sql="select * from files where uid=1";  
+//String edit="Edit", f=(String)session.getAttribute("edit");
+ResultSet rs=connect.executeQuery(sql);
+if(!rs.first())
+       {%>
+       <h3> No Files are Uploaded yet</h3>
+ <%}
+else
+       { %>
+     <table border="0" length="50%" width="50%">
+      
+    <%
+   while(rs.next())    
+               
+  {%> 
+                 
+    <tr class="tr1" >
+        <td><a class=".a1" href="accessfile.jsp?id=<%=rs.getInt(1)%>" <td class="td1"><%=rs.getString("file_name")%></td>
+    <td  class="td1"><%=rs.getString("file_size")%>kb</td><td  class="td1"><%= rs.getDate("date")%></td>
+     
+</tr> 
+
+<%}
+
+}    }   
+else
+{
+ %> 
+ <h3 class="form-signin-heading">Please <a href="login.jsp">Login</a> Again </h3>
+  <%}%>
+    
+
+                
+                </table>    
+                
+     
+  
+    </div>
+
+    <!-- Example row of columns -->
+   
+</div>
+<%@include file="footer.jsp" %>

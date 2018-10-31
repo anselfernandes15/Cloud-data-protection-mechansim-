@@ -1,0 +1,61 @@
+<%@include file="header.jsp" %>
+<%@include file="navigation1.jsp" %>
+<%@include file="flash.jsp" %>
+
+<div class="container">
+    <div class="row background space20">
+        <div class="span6">
+<form class="form-signin" action="uploaddecoy" enctype="multipart/form-data" method="post">
+                    
+                <%
+                 String user=(String)session.getAttribute("user");
+if(user!=null&&user.equals("admin"))
+       {    
+String file=(String)session.getAttribute("file");
+if(file!=null&&file.equals("uploaded"))
+{
+%>                                                                  
+<h3 class="form-signin-heading">Upload The Other one</h3>
+<%
+session.setAttribute("file","");
+}%>
+            <h3 class="form-signin-heading">Select file to upload</h3>
+  
+                <input type="text" class="input-block-level validate[required,minSize[10]]" placeholder="Filename" name="data[File][filename]">
+                <input type="file"  class="input-block-level validate[required]"  name="data[File][file]">
+               <select name="type" class="input-block-level validate[required]" > 
+                    
+                        <option selected >Choose the Type</option>
+                        <option  value=".txt" >Text File(.txt)</option>
+                     <option  value=".htm">Html File(htm)</option>
+                     <option  value=".doc">Word Document(.doc)</option>
+                     <option  value=".docx">Microsoft Word(.docx)</option>
+                     <option  value=".jpg">Image(.jpg)</option>
+                     <option  value=".png">Image(.png)</option>
+                      <option  value=".gif">Image(.gif)</option>
+                  <option  value=".pdf">Pdf File(.pdf)</option>
+                  
+                  </select>
+                <button class="btn btn-large btn-primary" type="submit">Upload</button>
+                 <a href="adminhome.jsp"class="btn btn-large btn-primary" type="cancel">Cancel</a>
+           
+    
+
+  </form><%}   
+else
+{
+ %> 
+ <h3 class="form-signin-heading">Please <a href="login.jsp">Login</a> Again </h3>
+  <%}%>
+  </div>
+   <div class="span5">
+           <h1>Hello, world!</h1>
+            <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+            
+        </div>
+    </div>
+
+    <!-- Example row of columns -->
+   
+</div>
+<%@include file="footer.jsp" %>

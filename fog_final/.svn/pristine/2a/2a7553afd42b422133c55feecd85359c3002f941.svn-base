@@ -1,0 +1,58 @@
+<%@include file="header.jsp"%>
+<%@include file="navigation_user.jsp" %>
+<%@include file="flash.jsp" %>
+<!-- Carousel
+================================================== 
+
+ String ustatus="false";
+session.setAttribute("ustatus","false");
+        %>
+-->
+<div id="myCarousel" class="carousel slide" data-interval="3000">
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+  
+   
+</div>
+<!-- /.carousel -->
+
+
+
+
+<div class="container">
+   
+    <!--  =session.getAttribute("userid")%>Three columns of text below the carousel -->
+    
+
+   
+    <!-- START THE FEATURETTES -->
+
+    <hr class="featurette-divider">
+
+    <div class="featurette">
+        <img class="featurette-image pull-right" src="img/browser-icon-chrome.png">
+        <h2 class="featurette-heading">First featurette headling. <span class="muted">It'll blow your mind.</span></h2>
+        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="featurette">
+        <img class="featurette-image pull-left" src="img/browser-icon-firefox.png">
+        <h2 class="featurette-heading">Oh yeah, it's that good. <span class="muted">See for yourself.</span></h2>
+        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="featurette">
+        <img class="featurette-image pull-right" src="img/browser-icon-safari.png">
+        <h2 class="featurette-heading">And lastly, this one. <span class="muted">Checkmate.</span></h2>
+        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+    </div>
+</div>
+<!-- /END THE FEATURETTES -->
+<%@include file="footer.jsp" %>

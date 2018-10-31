@@ -1,0 +1,51 @@
+<%@include file="header.jsp" %>
+<%@include file="navigation.jsp" %>
+<%@include file="flash.jsp" %>
+
+<div class="container">
+    <div class="row background space20">
+        
+        
+<%
+ String flag=(String)session.getAttribute("ustatus");String msg=request.getParameter("msg");
+ if(msg==null)
+     session.setAttribute("lcount",0);
+ //out.print("sdfsdfds"+flag);
+if(flag!=null&&flag.equals("registered"))
+    {  %>
+    <h3>Hello <%=session.getAttribute("uname")%>,
+        You can login into your profile</h3>
+  <%}%>
+
+        <div class="span6">
+            <form class="form-signin" action="login" enctype="multipart/form-data">
+                <h2 class="form-signin-heading">Please Login</h2>
+                <input type="text" class="input-block-level validate[required]" placeholder="Username" name="data[User][username]">
+                <input type="password" class="input-block-level validate[required]" placeholder="Password" name="data[User][password]">
+              <% 
+if(msg!=null)
+       {int c=(Integer)session.getAttribute("lcount");
+c++;session.setAttribute("lcount",c);
+
+%><%=msg%><%
+}
+String msg1=request.getParameter("msg1");
+if(msg1!=null)
+       {%><%=msg1%><%
+}%>
+                <button class="btn btn-large btn-primary" type="submit">Login</button>
+            </form>
+        </div>
+        
+       
+        <div class="span5">
+            <h1>Hello, world!</h1>
+            <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+            
+        </div>
+    </div>
+
+    <!-- Example row of columns -->
+    
+</div>
+<%@include file="footer.jsp" %>
